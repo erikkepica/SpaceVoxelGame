@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 3.16)
 set(CMAKE_CXX_STANDARD 17)
 
 #! ! ! ! ! ! !
-#set this to ON instead of OFF to ship the game!
+#set this to true to ship the game!
 #basically this will change the RESOURCES_PATH to be the local path
 #! ! ! ! ! ! !
 set(PRODUCTION_BUILD OFF CACHE BOOL "Make this a production build" FORCE)
@@ -44,23 +44,14 @@ add_subdirectory(thirdparty/glfw-3.3.2)			#window oppener
 add_subdirectory(thirdparty/glad)				#opengl loader
 add_subdirectory(thirdparty/stb_image)			#loading immaged
 add_subdirectory(thirdparty/stb_truetype)		#loading ttf files
-#add_subdirectory(thirdparty/enet-1.3.17)		#networking
 add_subdirectory(thirdparty/raudio)				#audio
 add_subdirectory(thirdparty/glm)				#math
 add_subdirectory(thirdparty/imgui-docking)		#ui
-#----------V-----------------------V------------#my libraries												
-add_subdirectory(thirdparty/safeSave)			#saving data, designed for gamedev. It also makes backups so the player won't loose saves.
-add_subdirectory(thirdparty/profilerLib)		#profiling, just a simpe library for measuring elapsed time
-add_subdirectory(thirdparty/gl2d)				#2D rendering library
-add_subdirectory(thirdparty/glui)				#ui library, usefull for making game menus
-
-
-# MY_SOURCES is defined to be a list of all the source files for my game 
-# DON'T ADD THE SOURCES BY HAND, they are already added with this macro
-file(GLOB_RECURSE MY_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 
 
 add_executable("${CMAKE_PROJECT_NAME}")
+
+target_sources("${CMAKE_PROJECT_NAME}" PRIVATE ${MY_SOURCES}  "src/main.cpp" "src/graphics/ElementBufferObject.cpp" "src/graphics/ElementBufferObject.h" "src/graphics/ShaderClass.cpp" "src/graphics/ShaderClass.h" "src/graphics/Texture.cpp" "src/graphics/Texture.h" "src/graphics/VertexArrayObject.cpp" "src/graphics/VertexArrayObject.h" "src/graphics/VertexBufferObject.cpp" "src/graphics/VertexBufferObject.h" "src/Logging.h" "src/Application/Window.cpp" "src/Application/Window.h" "src/Application/Application.h" "src/Application/Application.cpp" "src/Universe/Universe.h")
 
 set_property(TARGET "${CMAKE_PROJECT_NAME}" PROPERTY CXX_STANDARD 17)
 
@@ -83,7 +74,6 @@ else()
 
 endif()
 
-target_sources("${CMAKE_PROJECT_NAME}" PRIVATE ${MY_SOURCES} )
 
 
 if(MSVC) # If using the VS compiler...
@@ -103,9 +93,7 @@ if (WIN32)
 endif()
 
 
-target_include_directories("${CMAKE_PROJECT_NAME}" PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include/")
-target_include_directories("${CMAKE_PROJECT_NAME}" PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include/gameLayer/")
-target_include_directories("${CMAKE_PROJECT_NAME}" PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include/platform/")
+target_include_directories("${CMAKE_PROJECT_NAME}" PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/")
 
 
 #ADD enet version! also don't forget to uncomment enet from above
@@ -114,4 +102,4 @@ target_include_directories("${CMAKE_PROJECT_NAME}" PUBLIC "${CMAKE_CURRENT_SOURC
 
 
 target_link_libraries("${CMAKE_PROJECT_NAME}" PRIVATE glm glfw 
-	glad stb_image stb_truetype gl2d raudio imgui safeSave profilerLib glui)
+	glad stb_image stb_truetype raudio imgui)
