@@ -24,14 +24,7 @@ public:
 	template<typename T>
 	void Push(unsigned int count)
 	{
-		LOG_ERROR("VERTEX BUFFER LAYOUT: unsuported type", true);
-	}
-
-	template<>
-	void Push<float>(unsigned int count)
-	{
-		m_Elements.push_back({ count, GL_FLOAT, GL_FALSE, m_Stride });
-		m_Stride += count * VertexBufferElement::GetSize(GL_FLOAT);
+		static_assert(sizeof(T) == 0, "VERTEX BUFFER LAYOUT: unsupported type. Provide explicit specialization for Push<T>.");
 	}
 
 	void SetAttributes();
@@ -46,7 +39,7 @@ private:
 public:
 	VAO();
 
-	void DoAttribs(VertexBufferLayout& attribs);
+	void DoAttribs(VertexBufferLayout attribs);
 
 	~VAO();
 
@@ -56,4 +49,11 @@ public:
 
 	static void Unbind();
 };
+
+template<>
+inline void VertexBufferLayout::Push<float>(unsigned int count)
+{
+	m_Elements.push_back({ count, GL_FLOAT, GL_FALSE, m_Stride });
+	m_Stride += count * VertexBufferElement::GetSize(GL_FLOAT);
+}
 

@@ -9,5 +9,7 @@ int main()
 	);
 
 	app->Run();
+
+	std::cin.get();
 	app->Shutdown();
 }

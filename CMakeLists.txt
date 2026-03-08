@@ -9,7 +9,9 @@ set(CMAKE_CXX_STANDARD 17)
 #set this to true to ship the game!
 #basically this will change the RESOURCES_PATH to be the local path
 #! ! ! ! ! ! !
-set(PRODUCTION_BUILD OFF CACHE BOOL "Make this a production build" FORCE)
+set(PRODUCTION_BUILD FALSE CACHE BOOL "Make this a production build" FORCE)
+#enabe/disable console
+set(DEVELOPMENT_BUILD TRUE CACHE BOOL "Make this a production build" FORCE)
 #delete the out folder after changing if visual studio doesn recognize the change!
 
 
@@ -51,7 +53,7 @@ add_subdirectory(thirdparty/imgui-docking)		#ui
 
 add_executable("${CMAKE_PROJECT_NAME}")
 
-target_sources("${CMAKE_PROJECT_NAME}" PRIVATE ${MY_SOURCES}  "src/main.cpp" "src/graphics/ElementBufferObject.cpp" "src/graphics/ElementBufferObject.h" "src/graphics/ShaderClass.cpp" "src/graphics/ShaderClass.h" "src/graphics/Texture.cpp" "src/graphics/Texture.h" "src/graphics/VertexArrayObject.cpp" "src/graphics/VertexArrayObject.h" "src/graphics/VertexBufferObject.cpp" "src/graphics/VertexBufferObject.h" "src/Logging.h" "src/Application/Window.cpp" "src/Application/Window.h" "src/Application/Application.h" "src/Application/Application.cpp" "src/Universe/Universe.h")
+target_sources("${CMAKE_PROJECT_NAME}" PRIVATE ${MY_SOURCES}  "src/main.cpp" "src/graphics/ElementBufferObject.cpp" "src/graphics/ElementBufferObject.h" "src/graphics/ShaderClass.cpp" "src/graphics/ShaderClass.h" "src/graphics/Texture.cpp" "src/graphics/Texture.h" "src/graphics/VertexArrayObject.cpp" "src/graphics/VertexArrayObject.h" "src/graphics/VertexBufferObject.cpp" "src/graphics/VertexBufferObject.h" "src/Logging.h" "src/Application/Window.cpp" "src/Application/Window.h" "src/Application/Application.h" "src/Application/Application.cpp" "src/Universe/Universe.h" "src/Universe/Universe.cpp" "src/ECS/Entity.h" "src/ECS/Component.h"  "src/ECS/Entity.cpp" "src/ECS/Transform.h" "src/ECS/Renderer.h" "src/Universe/Systems/System.h" "src/Universe/Systems/TransformSystem.h")
 
 set_property(TARGET "${CMAKE_PROJECT_NAME}" PROPERTY CXX_STANDARD 17)
 

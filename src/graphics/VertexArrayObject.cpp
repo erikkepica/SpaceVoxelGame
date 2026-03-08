@@ -23,7 +23,7 @@ VAO::VAO()
 {
 }
 
-void VAO::DoAttribs(VertexBufferLayout& attribs)
+void VAO::DoAttribs(VertexBufferLayout attribs)
 {
 	m_Attribs = attribs;
 
