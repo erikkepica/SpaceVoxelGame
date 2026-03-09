@@ -8,6 +8,7 @@
 #include"graphics/VertexArrayObject.h"
 #include"graphics/VertexBufferObject.h"
 
+
 class Renderer : public Component
 {
 public:
@@ -17,6 +18,19 @@ public:
 	{
 		this->vertices = vertices;
 		this->indices = indices;	
+	}
+
+	void CreateMesh(VertexBufferLayout vbl)
+	{
+		VAO.Generate();
+		VBO.Generate(vertices);
+		EBO.Generate(indices);
+
+		VAO.DoAttribs(vbl);
+
+		VBO::UnBind();
+		VAO::Unbind();
+		EBO::UnBind();
 	}
 
 	std::vector<float> vertices

@@ -1,5 +1,10 @@
 #include "Entity.h"
 
+Entity::Entity()
+{
+	this->name = "none";
+}
+
 Entity::Entity(std::string name)
 {
 	this->name = name;

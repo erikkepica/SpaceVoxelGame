@@ -36,5 +36,5 @@ private:
 	void InitGlad();
 	void OpenGLSettings();
 
-	std::unique_ptr<Window> m_Window;
+	std::shared_ptr<Window> m_Window;
 };

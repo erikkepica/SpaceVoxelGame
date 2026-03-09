@@ -21,7 +21,7 @@ void Application::Create()
 
 void Application::InitWindow(WindowData windowData)
 {
-	m_Window = std::make_unique<Window>(windowData);
+	m_Window = std::make_shared<Window>(windowData);
 	m_Window->Create(data.name);
 }
 
@@ -88,7 +88,7 @@ void Application::OpenGLSettings()
 
 void Application::Run()
 {
-	Universe universe;
+	Universe universe(m_Window);
 
 	float lastFrame = 0;
 
@@ -109,7 +109,7 @@ void Application::Run()
 		glClearColor(28.f/255, 31.f/255, 36.f/255, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		universe.Render(m_Window->data);
+		universe.Render();
 		universe.Update(deltaTime);
 
 		glfwSwapBuffers(m_Window->GetGLFWWindow());

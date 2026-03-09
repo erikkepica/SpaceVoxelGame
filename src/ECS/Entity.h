@@ -9,6 +9,7 @@
 class Entity
 {
 public:
+	Entity();
 	Entity(std::string name);
 
 	std::string name;
