@@ -10,6 +10,6 @@ int main()
 
 	app->Run();
 
-	std::cin.get();
+//	std::cin.get();
 	app->Shutdown();
 }

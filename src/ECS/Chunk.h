@@ -7,10 +7,14 @@
 
 #include"ECS/Block.h"
 
+#include"Universe/Universe.h"
+
 class Chunk : public Entity
 {
 public:
-	Chunk(int width, int height);
+
+	Chunk(){}
+	Chunk(int width, int height, Universe* universe);
 
 	//TODO make a seperate world generation system (maybe with components)
 	void GenerateChunk();
@@ -19,8 +23,10 @@ public:
 	std::shared_ptr<ChunkComponent> chunkComponent;
 	std::shared_ptr<Renderer> renderer;
 
-	Block GetBlock(int x, int y, int z);
+	unsigned int GetBlock(int x, int y, int z);
+
+	Universe* universe = nullptr;
 
 private:
-	std::vector<Block> m_Blocks;
+	std::vector<unsigned int> m_Blocks;
 };
