@@ -5,9 +5,16 @@
 #include"glm/gtc/matrix_transform.hpp"
 #include<memory>
 
+#include<GLFW/glfw3.h>
 class Camera : public Component
 {
 public:
+	float nearPlane = .1f;
+
+	float FOV = 90.0f;
+
+	glm::mat4 projection;
+
 	Camera()
 	{
 	}
@@ -20,5 +27,10 @@ public:
 		view = glm::rotate(view, glm::radians(transform->rotation.z), glm::vec3(0, 0, 1));
 		view = glm::translate(view, -transform->position);
 		return view;
+	}
+
+	void SetProjection(float aspectRatio)
+	{
+		projection = glm::infinitePerspective(glm::radians(FOV), aspectRatio, nearPlane);
 	}
 };

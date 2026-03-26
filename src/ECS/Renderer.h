@@ -50,10 +50,23 @@ public:
 
 	};
 
+	void BindTextures()
+	{
+		for (int i = 0; i < textures.size(); i++)
+		{
+			textures[i].Bind(i);
+		}
+	}
+
+	void PushTexture(std::string path)
+	{
+		textures.push_back(Texture(path));
+	}
+
 	VAO VAO;
 	VBO VBO;
 	EBO EBO;
 
 	Shader shader;
-	Texture texture;
+	std::vector<Texture> textures;
 };

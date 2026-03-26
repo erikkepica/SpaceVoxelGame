@@ -23,6 +23,9 @@ void Application::InitWindow(WindowData windowData)
 {
 	m_Window = std::make_shared<Window>(windowData);
 	m_Window->Create(data.name);
+
+	glfwSetInputMode(m_Window->GetGLFWWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
 }
 
 void Application::CreateConsole()
@@ -49,12 +52,14 @@ void error_callback(int error, const char* description)
 
 void Application::InitGlfw()
 {
+
 	if (!glfwInit())
 	{
 		LOG_ERROR("GLFW: Failed to initialize", true);
 	}
 	LOG_INFO("GLFW: Initialized");
 	glfwSetErrorCallback(error_callback);
+
 }
 
 void Application::InitGlad()
@@ -76,6 +81,7 @@ void Application::OpenGLSettings()
 	glEnable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDepthFunc(GL_LEQUAL);
 }
 
 
@@ -106,7 +112,7 @@ void Application::Run()
 
 
 		glViewport(0, 0, width, height);
-		glClearColor(28.f/255, 31.f/255, 36.f/255, 1);
+		glClearColor(0,0,0, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		universe.Render();

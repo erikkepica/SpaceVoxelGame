@@ -15,7 +15,6 @@ public:
 
 
 private:
-	void CreateMesh(std::shared_ptr<Renderer> renderer);
 	void Render(std::shared_ptr<Renderer> renderer); // Render without transform, for UI elements
 	void Render(std::shared_ptr<Renderer> renderer, std::shared_ptr<Transform> transform);
 };

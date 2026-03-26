@@ -7,14 +7,14 @@
 
 #include"ECS/Block.h"
 
-#include"Universe/Universe.h"
+#include"Body.h"
 
 class Chunk : public Entity
 {
 public:
 
 	Chunk(){}
-	Chunk(int width, int height, Universe* universe);
+	Chunk(int width, int height, Body* body);
 
 	//TODO make a seperate world generation system (maybe with components)
 	void GenerateChunk();
@@ -25,7 +25,9 @@ public:
 
 	unsigned int GetBlock(int x, int y, int z);
 
-	Universe* universe = nullptr;
+	Body* body = nullptr;
+
+	glm::vec3 relativePosition = glm::vec3(0, 0, 0);
 
 private:
 	std::vector<unsigned int> m_Blocks;

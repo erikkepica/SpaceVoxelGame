@@ -1,9 +1,9 @@
 #include"Chunk.h"
 #include"Block.h"
+#include"Universe/Noise/FastNoiseLite.h"
 
-
-Chunk::Chunk(int width, int height, Universe* universe)
-	:Entity("Chunk"), universe(universe)
+Chunk::Chunk(int width, int height, Body* body)
+	:Entity("Chunk"), body(body)
 {
 	AddComponent(std::make_shared<Transform>(), "default");
 	transform = GetComponent<Transform>();
@@ -17,20 +17,42 @@ Chunk::Chunk(int width, int height, Universe* universe)
 
 void Chunk::GenerateChunk()
 {
+	FastNoiseLite noise;
+	noise.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
+	noise.SetFractalType(FastNoiseLite::FractalType_Ridged);
+	noise.SetFrequency(0.01f);
+
 	m_Blocks.clear();
-	for(int x = 0; x < chunkComponent->width; x++)
+	m_Blocks.reserve(chunkComponent->width * chunkComponent->height * chunkComponent->width);
+
+	glm::vec3 bodyCenter = glm::vec3(body->body->bodySize) * 0.5f + body->transform->position;
+	const float radius = body->body->bodySize * 0.5f;
+
+	const float noiseAmplitude = 32;
+
+	for (int x = 0; x < chunkComponent->width; ++x)
 	{
-		for (int y = 0; y < chunkComponent->height; y++)
+		for (int y = 0; y < chunkComponent->height; ++y)
 		{
-			for(int z = 0; z < chunkComponent->width; z++)
+			for (int z = 0; z < chunkComponent->width; ++z)
 			{
-				if (y > z)
+				glm::vec3 worldPos = glm::vec3(z, y, x)+transform->position;
+
+				float dist = glm::distance(worldPos, bodyCenter);
+
+
+
+				float n = noise.GetNoise(worldPos.x, worldPos.y, worldPos.z) * noiseAmplitude;
+
+				float threshold = radius - n;
+
+				if (dist > threshold)
 				{
-					m_Blocks.push_back(universe->blockRegistry->GetBlockID("AIR"));
+					m_Blocks.push_back(body->universe->blockRegistry->GetBlockID("AIR"));
 				}
 				else
 				{
-					m_Blocks.push_back(universe->blockRegistry->GetBlockID("ROCK"));
+					m_Blocks.push_back(body->universe->blockRegistry->GetBlockID("ROCK"));
 				}
 			}
 		}
@@ -46,7 +68,7 @@ void Chunk::GenerateChunkMesh()
 	for (int x = 0; x < chunkComponent->width; x++) {
 		for (int y = 0; y < chunkComponent->height; y++) {
 			for (int z = 0; z < chunkComponent->width; z++) {
-				const auto& blockData = universe->blockRegistry->GetBlockData(GetBlock(x, y, z));
+				const auto& blockData = body->universe->blockRegistry->GetBlockData(GetBlock(x, y, z));
 				if (blockData.model.faces.empty()) continue;
 
 				for (int f = 0; f < blockData.model.faces.size(); f++) {
@@ -59,7 +81,7 @@ void Chunk::GenerateChunkMesh()
 						cy < 0 || cy >= chunkComponent->height ||
 						cz < 0 || cz >= chunkComponent->width;
 					if (!outside) {
-						if (universe->blockRegistry->GetBlockData(GetBlock(cx, cy, cz)).culling) continue;
+						if (body->universe->blockRegistry->GetBlockData(GetBlock(cx, cy, cz)).culling) continue;
 					}
 
 					for (int i = 0; i < 4; i++) {
@@ -91,7 +113,8 @@ void Chunk::GenerateChunkMesh()
 
 	renderer->shader.Generate(RESOURCES_PATH "vertex.vert", RESOURCES_PATH "fragment.frag");
 
-	renderer->texture.Generate(RESOURCES_PATH "head.png");
+	renderer->PushTexture(RESOURCES_PATH "Textures/AsteroidOne.png");
+	renderer->PushTexture(RESOURCES_PATH "Textures/AsteroidOneSpecular.png");
 }
 
 unsigned int Chunk::GetBlock(int x, int y, int z)

@@ -13,11 +13,10 @@ public:
 
     void Generate(std::string path);
 
-    void Bind(unsigned int glWhatTex);
-    void Bind();
+    void Bind(unsigned int slot = 0);
 
-    unsigned int GetID();
     char PathBuff[128]{ " " };
+
 private:
     unsigned int m_ID;
 };
